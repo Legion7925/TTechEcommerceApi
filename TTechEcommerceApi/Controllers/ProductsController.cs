@@ -1,52 +1,48 @@
 ﻿using EcommerceApi.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
 
 namespace TTechEcommerceApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class ProductsController : ControllerBase
     {
-        private readonly ICategoryService categoryService;
+        private readonly IProductService productService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public ProductsController(IProductService productService)
         {
-            this.categoryService = categoryService;
+            this.productService = productService;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Category>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Product>))]
         public IActionResult GetAll()
         {
-            try
-            {
-                return Ok(categoryService.GetAll());
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
+            return Ok(productService.GetAll());
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Category))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Product))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Add([FromBody] Category category)
+        public async Task<IActionResult> Add([FromBody] Product product)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            if (category.Id < 0)
+            if (product.Id < 0)
                 return BadRequest("Invalid Id !");
 
             try
             {
-                var submittedCategory = await categoryService.AddCategory(category);
-                return Created("TODO", submittedCategory);
+                var submittedProduct = await productService.AddProduct(product);
+                return Created("TODO", submittedProduct);
+            }
+            catch (TTechException te)
+            {
+                return BadRequest(te.Message);
             }
             catch (Exception ex)
             {
@@ -58,12 +54,14 @@ namespace TTechEcommerceApi.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("{categoryId}")]
-        public async Task<IActionResult> Update([FromRoute] int categoryId, [FromBody] Category category)
+        [Route("{productId}")]
+        public async Task<IActionResult> Update([FromRoute] int productId, [FromBody] Product product)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
             try
             {
-                var result = await categoryService.UpdateCategory(categoryId, category);
+                var result = await productService.UpdateProduct(productId, product);
                 if (result == null)
                     return NotFound();
                 else
@@ -74,39 +72,39 @@ namespace TTechEcommerceApi.Controllers
                 //todo log the exception
                 return StatusCode(500);
             }
+
         }
 
         [HttpGet]
-        [Route("{categoryId}")]
+        [Route("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int categoryId)
+        public async Task<IActionResult> GetById(int productId)
         {
             try
             {
-                var category = await categoryService.GetCategoryById(categoryId);
-                if (category == null)
+                var product = await productService.GetProductById(productId);
+                if (product == null)
                     return NotFound();
                 else
-                    return Ok(category);
+                    return Ok(product);
             }
             catch (Exception ex)
             {
                 //todo log the exception
                 return StatusCode(500);
             }
-
         }
 
         [HttpDelete]
-        [Route("{categoryId}")]
+        [Route("{productId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(int categoryId)
+        public async Task<IActionResult> Delete(int productId)
         {
             try
             {
-                var success = await categoryService.DeleteCategory(categoryId);
+                var success = await productService.DeleteProduct(productId);
                 if (!success)
                     return NotFound();
                 else

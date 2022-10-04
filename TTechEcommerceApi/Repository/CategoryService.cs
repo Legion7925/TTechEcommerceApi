@@ -1,9 +1,10 @@
 ﻿using EcommerceApi.Entities;
 using Microsoft.EntityFrameworkCore;
+using TTechEcommerceApi.Interface;
 
 namespace TTechEcommerceApi.Repository
 {
-    public class CategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly EcommerceContext context;
 
@@ -22,14 +23,12 @@ namespace TTechEcommerceApi.Repository
             return await context.Categories.FirstOrDefaultAsync(i => i.Id == categoryId);
         }
 
-
         public async Task<Category> AddCategory(Category category)
         {
             context.Categories.Add(category);
             await context.SaveChangesAsync();
             return category;
         }
-
 
         public async Task<Category?> UpdateCategory(int categoryId, Category category)
         {
@@ -46,6 +45,18 @@ namespace TTechEcommerceApi.Repository
             {
                 return null;
             }
+        }
+
+        public async Task<bool> DeleteCategory(int categoryId)
+        {
+            var category = await GetCategoryById(categoryId);
+            if(category == null)
+            {
+                return false;
+            }
+            context.Categories.Remove(category);
+            await context.SaveChangesAsync();
+            return true;
         }
     }
 }

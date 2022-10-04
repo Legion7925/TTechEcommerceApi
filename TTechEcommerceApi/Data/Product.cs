@@ -16,7 +16,7 @@ namespace EcommerceApi.Entities
 
         public bool IsAvailable { get; set; }
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public Category? Category { get; set; }
 
         public int CategoryId { get; set; }
