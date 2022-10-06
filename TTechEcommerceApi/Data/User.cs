@@ -32,25 +32,19 @@ namespace EcommerceApi.Entities
         [MaxLength(150)]
         public string? PasswordHash { get; set; }
 
-        //public string? VerificationToken { get; set; }
+        public DateTime Created { get; set; }
 
-        //public DateTime? Verified { get; set; }
+        public DateTime? Updated { get; set; }
 
-        //public bool IsVerified => Verified.HasValue || PasswordReset.HasValue;
+        public string? Email { get; set; }
 
-        //public string? ResetToken { get; set; }
+        public string? ResetToken { get; set; }
 
-        //public DateTime? ResetTokenExpires { get; set; }
+        public DateTime? ResetTokenExpires { get; set; }
 
-        //public DateTime? PasswordReset { get; set; }
+        public DateTime? PasswordReset { get; set; }
 
-        //public DateTime Created { get; set; }
-
-        //public DateTime? Updated { get; set; }
-
-        //public string? Email { get; set; }
-
-        //[JsonIgnore]
-        //public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+        [JsonIgnore]
+        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }
