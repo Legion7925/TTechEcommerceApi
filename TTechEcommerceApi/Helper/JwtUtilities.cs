@@ -4,17 +4,17 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TTechEcommerceApi.Interface;
 
 namespace TTechEcommerceApi.Helper
 {
-    public class JwtUtilities
+
+    public class JwtUtilities : IJwtUtilities
     {
-        private readonly EcommerceContext context;
         private readonly AppSettings appSettings;
 
-        public JwtUtilities(EcommerceContext context, IOptions<AppSettings> appSettings)
+        public JwtUtilities(IOptions<AppSettings> appSettings)
         {
-            this.context = context;
             this.appSettings = appSettings.Value;
         }
 
@@ -49,16 +49,6 @@ namespace TTechEcommerceApi.Helper
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-        }
-
-        public bool ValidateJwtToken(string? token)
-        {
-            if (token == null)
-                return false;
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            return false;
         }
     }
 }

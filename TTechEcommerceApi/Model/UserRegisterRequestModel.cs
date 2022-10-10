@@ -2,7 +2,7 @@
 
 namespace TTechEcommerceApi.Model
 {
-    public class UserRegisterRequest
+    public class UserRequestModel
     {
         [Required]
         public string? NameFamily { get; set; }
