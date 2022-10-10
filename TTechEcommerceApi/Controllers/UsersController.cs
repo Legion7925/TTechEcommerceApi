@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
@@ -6,6 +7,7 @@ using TTechEcommerceApi.Model;
 
 namespace TTechEcommerceApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -19,12 +21,22 @@ namespace TTechEcommerceApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserResponseModel>))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         public IActionResult GetAll()
         {
-            return Ok(userService.GetAllUsers());
+            try
+            {
+                return Ok(userService.GetAllUsers());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Something went wrong please contact the support for more information!");
+                //todo log errors later on
+            }
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserResponseModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
@@ -33,19 +45,20 @@ namespace TTechEcommerceApi.Controllers
             try
             {
                 var user = await userService.Register(model);
-                return Created("TODO",user );
+                return Created("TODO", user);
             }
             catch (TTechException te)
             {
                 return BadRequest(te.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Something went wrong please contact the support for more information!");
             }
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponseModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
@@ -60,7 +73,48 @@ namespace TTechEcommerceApi.Controllers
             {
                 return BadRequest(te.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Something went wrong please contact the support for more information!");
+            }
+        }
+
+        [HttpPut]
+        [Route("{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
+        public async Task<IActionResult> Update([FromRoute] int userId, [FromBody] UserRequestModel model)
+        {
+            try
+            {
+                return Ok(await userService.Update(model, userId));
+            }
+            catch (TTechException te)
+            {
+                return BadRequest(te.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Something went wrong please contact the support for more information!");
+            }
+        }
+
+        [HttpDelete]
+        [Route("{userId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Delete([FromRoute] int userId)
+        {
+            try
+            {
+                await userService.Delete(userId);
+                return NoContent();
+            }
+            catch (TTechException te)
+            {
+                return BadRequest(te.Message);
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, "Something went wrong please contact the support for more information!");
             }
