@@ -35,7 +35,7 @@ namespace TTechEcommerceApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserResponseModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
@@ -57,7 +57,7 @@ namespace TTechEcommerceApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("Login")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponseModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
