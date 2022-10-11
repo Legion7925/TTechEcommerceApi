@@ -6,13 +6,14 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
+using TTechEcommerceApi.MapperConfiguration;
 using TTechEcommerceApi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<EcommerceContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddAuthentication(options =>
 {

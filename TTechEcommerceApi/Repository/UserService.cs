@@ -76,6 +76,7 @@ namespace TTechEcommerceApi.Repository
             var jwtToken = jwtUtilities.GenerateJwtToken(findUser);
 
             var response = mapper.Map<AuthenticateResponseModel>(findUser);
+            response.JwtToken = jwtToken;
 
             return response;
         }

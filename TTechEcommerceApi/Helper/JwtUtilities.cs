@@ -40,7 +40,9 @@ namespace TTechEcommerceApi.Helper
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("id", user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, userRole)
+                    new Claim(ClaimTypes.Role, userRole),
+                    new Claim(JwtRegisteredClaimNames.Aud , appSettings.Audience!),
+                    new Claim(JwtRegisteredClaimNames.Iss , appSettings.Issuer!)
                 }),
                 Expires = DateTime.Now.AddMinutes(5),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
