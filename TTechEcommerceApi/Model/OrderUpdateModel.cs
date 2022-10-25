@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using EcommerceApi.Entities;
+using System.ComponentModel.DataAnnotations;
 
-namespace EcommerceApi.Entities
+namespace TTechEcommerceApi.Model
 {
-    public class Order
+    public class OrderUpdateModel
     {
-        public int Id { get; set; }
-
         [Required]
         public int Quantity { get; set; }
 
@@ -17,18 +15,9 @@ namespace EcommerceApi.Entities
 
         public bool IsDelivered { get; set; }
 
-        [JsonIgnore]
-        public Category? Category { get; set; }
-
         public int? CategoryId { get; set; }
 
-        [JsonIgnore]
-        public Product? Product { get; set; }
-
         public int? ProductId { get; set; }
-
-        [JsonIgnore]
-        public User? User { get; set; }
 
         public int? UserId { get; set; }
 
