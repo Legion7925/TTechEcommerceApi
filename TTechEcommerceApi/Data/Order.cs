@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TTechEcommerceApi.Data;
 
 namespace EcommerceApi.Entities
 {
@@ -16,14 +15,17 @@ namespace EcommerceApi.Entities
 
         public bool IsDelivered { get; set; }
 
+        [JsonIgnore]
         public Category? Category { get; set; }
 
         public int? CategoryId { get; set; }
 
+        [JsonIgnore]
         public Product? Product { get; set; }
 
         public int? ProductId { get; set; }
 
+        [JsonIgnore]
         public User? User { get; set; }
 
         public int? UserId { get; set; }
