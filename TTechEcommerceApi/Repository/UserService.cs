@@ -53,7 +53,7 @@ namespace TTechEcommerceApi.Repository
 
             var isFirstUser = context.Users.Any();
 
-            user.Role = isFirstUser ? Role.Admin : Role.User;
+            user.Role = isFirstUser ? Role.User : Role.Admin;
             user.Created = DateTime.Now;
 
             //hashing password 

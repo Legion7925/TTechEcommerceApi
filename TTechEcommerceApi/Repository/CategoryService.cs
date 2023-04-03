@@ -51,10 +51,10 @@ namespace TTechEcommerceApi.Repository
         public async Task<bool> DeleteCategory(int categoryId)
         {
             var category = await GetCategoryById(categoryId);
+
             if(category == null)
-            {
                 return false;
-            }
+
             context.Categories.Remove(category);
             await context.SaveChangesAsync();
             return true;

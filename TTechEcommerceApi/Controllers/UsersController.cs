@@ -19,6 +19,7 @@ namespace TTechEcommerceApi.Controllers
             this.userService = userService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<UserResponseModel>> GetAll()
