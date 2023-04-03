@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
+using TTechEcommerceApi.Model;
 
 namespace TTechEcommerceApi.Repository
 {
@@ -14,9 +15,12 @@ namespace TTechEcommerceApi.Repository
             this.context = context;
         }
 
-        public IEnumerable<Product> GetAll()
+        public IEnumerable<Product> GetAll(ProdudctQueryParametersModel queryParameters)
         {
-            return context.Products.AsNoTracking();
+            var products = context.Products.AsNoTracking();
+            if (queryParameters.MinPrice is not null) products = products.Where(p => p.Price >= queryParameters.MinPrice);
+            if (queryParameters.MaxPrice is not null) products = products.Where(p => p.Price <= queryParameters.MaxPrice);
+            return products.Skip((queryParameters.Page - 1) * queryParameters.Size).Take(queryParameters.Size).ToArray();
         }
 
         public async Task<Product> AddProduct(Product product)

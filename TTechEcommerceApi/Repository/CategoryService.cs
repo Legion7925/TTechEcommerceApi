@@ -15,6 +15,7 @@ namespace TTechEcommerceApi.Repository
 
         public IEnumerable<Category> GetAll()
         {
+            //todo change the return type to action result
             return context.Categories.AsNoTracking();
         }
 

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TTechEcommerceApi.Data;
 
 namespace EcommerceApi.Entities
 {
-    public class Order
+    public class Order : BaseEntity
     {
-        public int Id { get; set; }
 
         [Required]
         public int Quantity { get; set; }

@@ -5,9 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.Model;
+using TTechEcommerceApi.Shared.Enum;
 
 namespace TTechEcommerceApi.Repository
-{  
+{
     public class UserService : IUserService
     {
         private readonly EcommerceContext context;

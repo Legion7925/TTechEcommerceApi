@@ -7,6 +7,7 @@ using System.Text;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.MapperConfiguration;
+using TTechEcommerceApi.Middlewares;
 using TTechEcommerceApi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -91,6 +92,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 app.MapControllers();
 

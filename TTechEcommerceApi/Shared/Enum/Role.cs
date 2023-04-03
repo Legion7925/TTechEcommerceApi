@@ -1,4 +1,4 @@
-﻿namespace EcommerceApi.Entities
+﻿namespace TTechEcommerceApi.Shared.Enum
 {
     public enum Role
     {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
+using TTechEcommerceApi.Model;
 
 namespace TTechEcommerceApi.Controllers
 {
@@ -21,9 +22,9 @@ namespace TTechEcommerceApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Product>))]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] ProdudctQueryParametersModel queryParameters)
         {
-            return Ok(productService.GetAll());
+            return Ok(productService.GetAll(queryParameters));
         }
 
         [HttpPost]
@@ -40,7 +41,7 @@ namespace TTechEcommerceApi.Controllers
             try
             {
                 var submittedProduct = await productService.AddProduct(product);
-                return Created("TODO", submittedProduct);
+                return RedirectToAction("GetById",submittedProduct.Id);
             }
             catch (TTechException te)
             {
@@ -48,8 +49,8 @@ namespace TTechEcommerceApi.Controllers
             }
             catch (Exception ex)
             {
-                //todo log the exception
-                return StatusCode(500);
+                return BadRequest("something went wrong!");
+                //toodo log the exception later
             }
         }
 
@@ -71,8 +72,8 @@ namespace TTechEcommerceApi.Controllers
             }
             catch (Exception ex)
             {
-                //todo log the exception
-                return StatusCode(500);
+                return BadRequest("something went wrong!");
+                //toodo log the exception later
             }
 
         }
@@ -93,8 +94,8 @@ namespace TTechEcommerceApi.Controllers
             }
             catch (Exception ex)
             {
-                //todo log the exception
-                return StatusCode(500);
+                return BadRequest("something went wrong!");
+                //toodo log the exception later
             }
         }
 
@@ -114,10 +115,9 @@ namespace TTechEcommerceApi.Controllers
             }
             catch (Exception ex)
             {
-                //todo log the exception
-                return StatusCode(500);
+                return BadRequest("something went wrong!");
+                //toodo log the exception later
             }
-
         }
     }
 }

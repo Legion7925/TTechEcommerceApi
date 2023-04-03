@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TTechEcommerceApi.Interface;
+using TTechEcommerceApi.Shared.Enum;
 
 namespace TTechEcommerceApi.Helper
 {

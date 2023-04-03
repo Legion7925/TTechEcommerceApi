@@ -20,9 +20,8 @@ namespace TTechEcommerceApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserResponseModel>))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-        public IActionResult GetAll()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<UserResponseModel>> GetAll()
         {
             try
             {
@@ -30,7 +29,7 @@ namespace TTechEcommerceApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Something went wrong please contact the support for more information!");
+                return BadRequest("something went wrong");
                 //todo log errors later on
             }
         }
@@ -39,7 +38,6 @@ namespace TTechEcommerceApi.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserResponseModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         public async Task<IActionResult> Register([FromBody] UserRequestModel model)
         {
             try
@@ -61,7 +59,6 @@ namespace TTechEcommerceApi.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponseModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequestModel model)
         {
             try
@@ -83,7 +80,6 @@ namespace TTechEcommerceApi.Controllers
         [Route("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         public async Task<IActionResult> Update([FromRoute] int userId, [FromBody] UserRequestModel model)
         {
             try
@@ -96,7 +92,7 @@ namespace TTechEcommerceApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Something went wrong please contact the support for more information!");
+                return BadRequest("Something went wrong please contact the support for more information!");
             }
         }
 

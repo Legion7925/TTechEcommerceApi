@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using TTechEcommerceApi.Data;
+using TTechEcommerceApi.Shared.Enum;
 
 namespace EcommerceApi.Entities
 {
-    public class User
+    public class User : BaseEntity
     {
-        public int Id { get; set; }
-
         public string? Title { get; set; }
 
         [Required]
