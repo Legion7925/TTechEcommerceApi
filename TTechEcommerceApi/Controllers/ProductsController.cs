@@ -8,14 +8,15 @@ using TTechEcommerceApi.Model;
 
 namespace TTechEcommerceApi.Controllers
 {
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsV1Controller : ControllerBase
     {
         private readonly IProductService productService;
 
-        public ProductsController(IProductService productService)
+        public ProductsV1Controller(IProductService productService)
         {
             this.productService = productService;
         }
@@ -32,26 +33,8 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Add([FromBody] Product product)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            if (product.Id < 0)
-                return BadRequest("Invalid Id !");
-
-            try
-            {
-                var submittedProduct = await productService.AddProduct(product);
-                return RedirectToAction("GetById",submittedProduct.Id);
-            }
-            catch (TTechException te)
-            {
-                return BadRequest(te.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong!");
-                //toodo log the exception later
-            }
+            var submittedProduct = await productService.AddProduct(product);
+            return RedirectToAction("GetById", new { productId = submittedProduct.Id });
         }
 
         [HttpPut]
@@ -62,19 +45,11 @@ namespace TTechEcommerceApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-            try
-            {
-                var result = await productService.UpdateProduct(productId, product);
-                if (result == null)
-                    return NotFound();
-                else
-                    return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong!");
-                //toodo log the exception later
-            }
+            var result = await productService.UpdateProduct(productId, product);
+            if (result == null)
+                return NotFound();
+            else
+                return Ok(result);
 
         }
 
@@ -84,19 +59,11 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int productId)
         {
-            try
-            {
-                var product = await productService.GetProductById(productId);
-                if (product == null)
-                    return NotFound();
-                else
-                    return Ok(product);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong!");
-                //toodo log the exception later
-            }
+            var product = await productService.GetProductById(productId);
+            if (product == null)
+                return NotFound();
+            else
+                return Ok(product);
         }
 
         [HttpDelete]
@@ -105,19 +72,11 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int productId)
         {
-            try
-            {
-                var success = await productService.DeleteProduct(productId);
-                if (!success)
-                    return NotFound();
-                else
-                    return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong!");
-                //toodo log the exception later
-            }
+            var success = await productService.DeleteProduct(productId);
+            if (!success)
+                return NotFound();
+            else
+                return NoContent();
         }
     }
 }

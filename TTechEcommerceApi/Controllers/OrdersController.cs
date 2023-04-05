@@ -23,15 +23,7 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Order>))]
         public IActionResult GetAll()
         {
-            try
-            {
-                return Ok(orderService.GetOrders());
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
+            return Ok(orderService.GetOrders());
         }
 
         [HttpPost]
@@ -45,16 +37,8 @@ namespace TTechEcommerceApi.Controllers
             if (order.Id < 0)
                 return BadRequest("Invalid Id !");
 
-            try
-            {
-                var submittedOrder = await orderService.AddOrder(order);
-                return Created("TODO", submittedOrder);
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
+            var submittedOrder = await orderService.AddOrder(order);
+            return Created("TODO", submittedOrder);
         }
 
         [HttpPut]
@@ -63,19 +47,11 @@ namespace TTechEcommerceApi.Controllers
         [Route("{categoryId}")]
         public async Task<IActionResult> Update([FromRoute] int orderId, [FromBody] OrderUpdateModel order)
         {
-            try
-            {
-                var result = await orderService.UpdateOrder(order, orderId);
-                if (result == null)
-                    return NotFound();
-                else
-                    return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
+            var result = await orderService.UpdateOrder(order, orderId);
+            if (result == null)
+                return NotFound();
+            else
+                return Ok(result);
         }
 
         [HttpGet]
@@ -84,20 +60,11 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int orderId)
         {
-            try
-            {
-                var result = await orderService.GetOrderById(orderId);
-                if (result == null)
-                    return NotFound();
-                else
-                    return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
-
+            var result = await orderService.GetOrderById(orderId);
+            if (result == null)
+                return NotFound();
+            else
+                return Ok(result);
         }
 
         [Authorize(Roles = "Admin")]
@@ -107,20 +74,11 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int orderId)
         {
-            try
-            {
-                var success = await orderService.DeleteOrder(orderId);
-                if (!success)
-                    return NotFound();
-                else
-                    return NoContent();
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
-
+            var success = await orderService.DeleteOrder(orderId);
+            if (!success)
+                return NotFound();
+            else
+                return NoContent();
         }
 
     }

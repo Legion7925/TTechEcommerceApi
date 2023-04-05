@@ -23,15 +23,7 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Category>))]
         public IActionResult GetAll()
         {
-            try
-            {
-                return Ok(categoryService.GetAll());
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
+            return Ok(categoryService.GetAll());
         }
 
         [HttpPost]
@@ -45,16 +37,8 @@ namespace TTechEcommerceApi.Controllers
             if (category.Id < 0)
                 return BadRequest("Invalid Id !");
 
-            try
-            {
-                var submittedCategory = await categoryService.AddCategory(category);
-                return Created("TODO", submittedCategory);
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
+            var submittedCategory = await categoryService.AddCategory(category);
+            return Created("TODO", submittedCategory);
         }
 
         [HttpPut]
@@ -63,19 +47,11 @@ namespace TTechEcommerceApi.Controllers
         [Route("{categoryId}")]
         public async Task<IActionResult> Update([FromRoute] int categoryId, [FromBody] Category category)
         {
-            try
-            {
-                var result = await categoryService.UpdateCategory(categoryId, category);
-                if (result == null)
-                    return NotFound();
-                else
-                    return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
+            var result = await categoryService.UpdateCategory(categoryId, category);
+            if (result == null)
+                return NotFound();
+            else
+                return Ok(result);
         }
 
         [HttpGet]
@@ -84,20 +60,11 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int categoryId)
         {
-            try
-            {
-                var category = await categoryService.GetCategoryById(categoryId);
-                if (category == null)
-                    return NotFound();
-                else
-                    return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
-
+            var category = await categoryService.GetCategoryById(categoryId);
+            if (category == null)
+                return NotFound();
+            else
+                return Ok(category);
         }
 
         [HttpDelete]
@@ -106,20 +73,11 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int categoryId)
         {
-            try
-            {
-                var success = await categoryService.DeleteCategory(categoryId);
-                if (!success)
-                    return NotFound();
-                else
-                    return NoContent();
-            }
-            catch (Exception ex)
-            {
-                //todo log the exception
-                return StatusCode(500);
-            }
-
+            var success = await categoryService.DeleteCategory(categoryId);
+            if (!success)
+                return NotFound();
+            else
+                return NoContent();
         }
     }
 }

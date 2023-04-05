@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using TTechEcommerceApi.Data;
 
 namespace EcommerceApi.Entities
 {
@@ -26,7 +28,7 @@ namespace EcommerceApi.Entities
         public int? ProductId { get; set; }
 
         [JsonIgnore]
-        public User? User { get; set; }
+        public User? User { get; set; } 
 
         public int? UserId { get; set; }
 

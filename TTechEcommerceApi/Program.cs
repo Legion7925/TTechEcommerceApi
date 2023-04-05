@@ -1,5 +1,6 @@
 using EcommerceApi.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -50,10 +51,21 @@ builder.Services.AddScoped<IUserService , CachedUserService>();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
+builder.Services.AddApiVersioning(builder =>
+{
+    builder.ReportApiVersions = true;
+    builder.DefaultApiVersion = new ApiVersion(1,0);
+    builder.AssumeDefaultVersionWhenUnspecified = true;
+});
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "TTechEcommerceApi", Version = "v1" });
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -86,7 +98,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", "TTechEcommerceApi"));
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

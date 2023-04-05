@@ -24,15 +24,7 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<UserResponseModel>> GetAll()
         {
-            try
-            {
-                return Ok(userService.GetAllUsers());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong");
-                //todo log errors later on
-            }
+            return Ok(userService.GetAllUsers());
         }
 
         [HttpPost("Register")]
@@ -41,19 +33,8 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         public async Task<IActionResult> Register([FromBody] UserRequestModel model)
         {
-            try
-            {
-                var user = await userService.Register(model);
-                return Created("TODO", user);
-            }
-            catch (TTechException te)
-            {
-                return BadRequest(te.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Something went wrong please contact the support for more information!");
-            }
+            var user = await userService.Register(model);
+            return Created("TODO", user);
         }
 
         [HttpPost("Login")]
@@ -62,19 +43,8 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequestModel model)
         {
-            try
-            {
-                var response = await userService.Authenticate(model);
-                return Ok(response);
-            }
-            catch (TTechException te)
-            {
-                return BadRequest(te.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Something went wrong please contact the support for more information!");
-            }
+            var response = await userService.Authenticate(model);
+            return Ok(response);
         }
 
         [HttpPut]
@@ -83,18 +53,7 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         public async Task<IActionResult> Update([FromRoute] int userId, [FromBody] UserRequestModel model)
         {
-            try
-            {
-                return Ok(await userService.Update(model, userId));
-            }
-            catch (TTechException te)
-            {
-                return BadRequest(te.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Something went wrong please contact the support for more information!");
-            }
+            return Ok(await userService.Update(model, userId));
         }
 
         [HttpDelete]
@@ -102,19 +61,8 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Delete([FromRoute] int userId)
         {
-            try
-            {
-                await userService.Delete(userId);
-                return NoContent();
-            }
-            catch (TTechException te)
-            {
-                return BadRequest(te.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Something went wrong please contact the support for more information!");
-            }
+            await userService.Delete(userId);
+            return NoContent();
         }
     }
 }

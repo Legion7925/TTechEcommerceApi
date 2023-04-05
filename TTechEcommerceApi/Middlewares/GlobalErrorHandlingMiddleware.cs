@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 using TTechEcommerceApi.Helper;
+using TTechEcommerceApi.Shared.Model;
 
 namespace TTechEcommerceApi.Middlewares
 {
@@ -19,26 +20,41 @@ namespace TTechEcommerceApi.Middlewares
             {
                 await _next(context);
             }
+            catch (TTechException te)
+            {
+                await HandleCustomExceptionAsync(context, te);
+            }
             catch (Exception error)
             {
-                var response = context.Response;
-                response.ContentType = "application/json";
-
-                switch (error)
-                {
-                    case TTechException e:
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        break;
-                    case KeyNotFoundException e:
-                        response.StatusCode = (int)HttpStatusCode.NotFound;
-                        break;
-                    default:
-                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        break;
-                }
-
-                var result = JsonConvert.SerializeObject(new {message = error?.Message ,});
+                await HandleUnhandledExceptionAsync(context, error);
             }
+        }
+
+        public async Task HandleCustomExceptionAsync(HttpContext context, TTechException te)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+            await context.Response.WriteAsJsonAsync(new ErrorResponse
+            {
+                Message = te.Message,
+                StatusCode = (int)HttpStatusCode.BadRequest,
+            });
+        }
+
+        private async Task HandleUnhandledExceptionAsync(HttpContext context , Exception ex)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            await context.Response.WriteAsJsonAsync(new ErrorResponse
+            {
+                Message = "Something went wrong please contact our support",
+                StatusCode = (int)HttpStatusCode.InternalServerError,
+            });
+
+            //todo log the exception error in serilog
+
         }
     }
 }
