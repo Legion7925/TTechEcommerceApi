@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TTechEcommerceApi.Filters.ActionFilters;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.Model;
@@ -34,36 +35,29 @@ namespace TTechEcommerceApi.Controllers
         public async Task<IActionResult> Add([FromBody] Product product)
         {
             var submittedProduct = await productService.AddProduct(product);
-            return RedirectToAction("GetById", new { productId = submittedProduct.Id });
+            return CreatedAtAction(nameof(GetById), new { productId = submittedProduct.Id }, submittedProduct);
         }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{productId}")]
+        [ServiceFilter(typeof(ValidateProductExists))]
         public async Task<IActionResult> Update([FromRoute] int productId, [FromBody] Product product)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
-            var result = await productService.UpdateProduct(productId, product);
-            if (result == null)
-                return NotFound();
-            else
-                return Ok(result);
-
+            await productService.UpdateProduct(productId, product);
+            return RedirectToAction(nameof(GetById), new { productId = productId });
         }
 
         [HttpGet]
         [Route("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ServiceFilter(typeof(ValidateProductExists))]
         public async Task<IActionResult> GetById(int productId)
         {
             var product = await productService.GetProductById(productId);
-            if (product == null)
-                return NotFound();
-            else
-                return Ok(product);
+            return Ok(product);
         }
 
         [HttpDelete]
@@ -72,11 +66,8 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int productId)
         {
-            var success = await productService.DeleteProduct(productId);
-            if (!success)
-                return NotFound();
-            else
-                return NoContent();
+           await productService.DeleteProduct(productId);
+           return NoContent();
         }
     }
 }

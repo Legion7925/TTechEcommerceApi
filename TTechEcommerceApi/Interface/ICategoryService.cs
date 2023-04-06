@@ -7,7 +7,7 @@ namespace TTechEcommerceApi.Interface
         Task<Category> AddCategory(Category category);
         IEnumerable<Category> GetAll();
         Task<Category?> GetCategoryById(int categoryId);
-        Task<Category?> UpdateCategory(int categoryId, Category category);
-        public Task<bool> DeleteCategory(int categoryId);
+        Task UpdateCategory(int categoryId, Category category);
+        public Task DeleteCategory(int categoryId);
     }
 }

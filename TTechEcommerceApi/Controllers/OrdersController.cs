@@ -31,12 +31,6 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Add([FromBody] Order order)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            if (order.Id < 0)
-                return BadRequest("Invalid Id !");
-
             var submittedOrder = await orderService.AddOrder(order);
             return Created("TODO", submittedOrder);
         }

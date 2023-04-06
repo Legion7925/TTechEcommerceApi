@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using TTechEcommerceApi.Extensions;
+using TTechEcommerceApi.Filters.ActionFilters;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.MapperConfiguration;
@@ -17,79 +19,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<EcommerceContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        RequireExpirationTime = true,
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.FromSeconds(1.0),
-        RequireSignedTokens = true,
-        ValidateIssuerSigningKey = true,
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidIssuer = builder.Configuration["AppSettings:Issuer"],
-        ValidAudience = builder.Configuration["AppSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Secret"]))
-    };
-});
-
+builder.ConfigureAuthentication();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IJwtUtilities, JwtUtilities>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IUserService , CachedUserService>();
-
-
-
+builder.Services.AddScoped<ValidateCategoryExists>();
+builder.Services.AddScoped<ValidateProductExists>();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
-builder.Services.AddApiVersioning(builder =>
-{
-    builder.ReportApiVersions = true;
-    builder.DefaultApiVersion = new ApiVersion(1,0);
-    builder.AssumeDefaultVersionWhenUnspecified = true;
-});
-
-builder.Services.AddVersionedApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;
-});
+builder.Services.ConfigureApiVersioning();
+builder.Services.ConfigureVersionedApiExplorer();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter the token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "bearer"
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
-});
+builder.Services.ConfigureSwaggerUIForAuthorizationWithToken();
 
 
 var app = builder.Build();

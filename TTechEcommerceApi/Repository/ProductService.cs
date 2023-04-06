@@ -39,14 +39,11 @@ namespace TTechEcommerceApi.Repository
             return await context.Products.FirstOrDefaultAsync(i => i.Id == productId);
         }
 
-        public async Task<Product?> UpdateProduct(int productId, Product product)
+        public async Task UpdateProduct(int productId, Product product)
         {
             var findProduct = await GetProductById(productId);
 
-            if (findProduct == null)
-                return null;
-
-            findProduct.Color = product.Color;
+            findProduct!.Color = product.Color;
             findProduct.Price = product.Price;
             findProduct.ImagePath = product.ImagePath;
             findProduct.Name = product.Name;
@@ -54,18 +51,13 @@ namespace TTechEcommerceApi.Repository
             findProduct.CategoryId = product.CategoryId;
 
             await context.SaveChangesAsync();
-            return findProduct;
         }
 
-        public async Task<bool> DeleteProduct(int productId)
+        public async Task DeleteProduct(int productId)
         {
             var findProduct = await GetProductById(productId);
-            if (findProduct == null)
-                return false;
-
-            context.Products.Remove(findProduct);
+            context.Products.Remove(findProduct!);
             await context.SaveChangesAsync();
-            return true;
         }
     }
 }

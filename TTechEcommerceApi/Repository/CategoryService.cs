@@ -31,33 +31,19 @@ namespace TTechEcommerceApi.Repository
             return category;
         }
 
-        public async Task<Category?> UpdateCategory(int categoryId, Category category)
+        public async Task UpdateCategory(int categoryId, Category category)
         {
             var findCategory = await GetCategoryById(categoryId);
-            if (findCategory != null)
-            {
-                findCategory.Name = category.Name;
-                findCategory.Description = category.Description;
-                await context.SaveChangesAsync();
-
-                return category;
-            }
-            else
-            {
-                return null;
-            }
+            findCategory!.Name = category.Name;
+            findCategory.Description = category.Description;
+            await context.SaveChangesAsync();
         }
 
-        public async Task<bool> DeleteCategory(int categoryId)
+        public async Task DeleteCategory(int categoryId)
         {
             var category = await GetCategoryById(categoryId);
-
-            if(category == null)
-                return false;
-
-            context.Categories.Remove(category);
+            context.Categories.Remove(category!);
             await context.SaveChangesAsync();
-            return true;
         }
     }
 }
