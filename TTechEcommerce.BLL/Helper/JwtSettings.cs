@@ -1,7 +1,9 @@
 ﻿namespace TTechEcommerceApi.Helper
 {
-    public class AppSettings
+    public class JwtSettings
     {
+        public const string SectionName = "JwtSettings";
+
         public string Secret { get; set; } = string.Empty;
 
         public int RefreshTokenTTL { get; set; }

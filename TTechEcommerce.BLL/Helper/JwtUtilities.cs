@@ -12,17 +12,17 @@ namespace TTechEcommerceApi.Helper
 
     public class JwtUtilities : IJwtUtilities
     {
-        private readonly AppSettings appSettings;
+        private readonly JwtSettings jwtSettings;
 
-        public JwtUtilities(IOptions<AppSettings> appSettings)
+        public JwtUtilities(IOptions<JwtSettings> jwtSettings)
         {
-            this.appSettings = appSettings.Value;
+            this.jwtSettings = jwtSettings.Value;
         }
 
         public string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
 
             var userRole = "";
 
@@ -42,8 +42,8 @@ namespace TTechEcommerceApi.Helper
                 {
                     new Claim("id", user.Id.ToString()),
                     new Claim(ClaimTypes.Role, userRole),
-                    new Claim(JwtRegisteredClaimNames.Aud , appSettings.Audience!),
-                    new Claim(JwtRegisteredClaimNames.Iss , appSettings.Issuer!)
+                    new Claim(JwtRegisteredClaimNames.Aud , jwtSettings.Audience!),
+                    new Claim(JwtRegisteredClaimNames.Iss , jwtSettings.Issuer!)
                 }),
                 Expires = DateTime.Now.AddMinutes(5),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

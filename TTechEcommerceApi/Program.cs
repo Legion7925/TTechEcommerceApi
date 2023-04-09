@@ -26,7 +26,7 @@ try
     // Add services to the container.
     builder.Services.AddDbContext<EcommerceContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
     builder.Services.AddAutoMapper(typeof(Program));
-    builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+    builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
     builder.ConfigureAuthentication();
 
     builder.Services.AddScoped<ICategoryService, CategoryService>();

@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
+using TTechEcommerceApi.Helper;
 
 namespace TTechEcommerceApi.Extensions
 {
@@ -27,9 +28,9 @@ namespace TTechEcommerceApi.Extensions
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidIssuer = builder.Configuration["AppSettings:Issuer"],
-                    ValidAudience = builder.Configuration["AppSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Secret"]))
+                    ValidIssuer = builder.Configuration[$"{JwtSettings.SectionName}:Issuer"],
+                    ValidAudience = builder.Configuration[$"{JwtSettings.SectionName}:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration[$"{JwtSettings.SectionName}:Secret"]!))
                 };
             });
         }
