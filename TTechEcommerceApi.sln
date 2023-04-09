@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTechEcommerceApi", "TTechEcommerceApi\TTechEcommerceApi.csproj", "{D34AA7CD-8BCB-414C-9344-95C5AF717CC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTechEcommerceApi", "TTechEcommerceApi\TTechEcommerceApi.csproj", "{D34AA7CD-8BCB-414C-9344-95C5AF717CC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTechEcommerce.BLL", "TTechEcommerce.BLL\TTechEcommerce.BLL.csproj", "{F576C2E8-06F7-4D2D-93E8-A58A5DB72D5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTechEcommerce.DAL", "TTechEcommerce.DAL\TTechEcommerce.DAL.csproj", "{4D6DDEF7-DC40-45DB-938A-FE833167FCFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{D34AA7CD-8BCB-414C-9344-95C5AF717CC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D34AA7CD-8BCB-414C-9344-95C5AF717CC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D34AA7CD-8BCB-414C-9344-95C5AF717CC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F576C2E8-06F7-4D2D-93E8-A58A5DB72D5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F576C2E8-06F7-4D2D-93E8-A58A5DB72D5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F576C2E8-06F7-4D2D-93E8-A58A5DB72D5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F576C2E8-06F7-4D2D-93E8-A58A5DB72D5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D6DDEF7-DC40-45DB-938A-FE833167FCFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D6DDEF7-DC40-45DB-938A-FE833167FCFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D6DDEF7-DC40-45DB-938A-FE833167FCFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D6DDEF7-DC40-45DB-938A-FE833167FCFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

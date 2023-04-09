@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Text;
 
 namespace TTechEcommerceApi.Extensions
@@ -80,6 +81,14 @@ namespace TTechEcommerceApi.Extensions
                     }
                 });
             });
+        }
+
+        public static void ConfigureSerilog(this WebApplicationBuilder builder)
+        {
+            builder.Host.UseSerilog((context, services, configuration) => configuration
+               .ReadFrom.Configuration(context.Configuration)
+               .ReadFrom.Services(services)
+               .Enrich.FromLogContext());
         }
 
     }
