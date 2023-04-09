@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
+using TTechEcommerceApi.Authentication;
 using TTechEcommerceApi.Helper;
 
 namespace TTechEcommerceApi.Extensions

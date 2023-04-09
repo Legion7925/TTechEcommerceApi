@@ -1,4 +1,4 @@
-﻿namespace TTechEcommerceApi.Helper
+﻿namespace TTechEcommerceApi.Authentication
 {
     public class JwtSettings
     {

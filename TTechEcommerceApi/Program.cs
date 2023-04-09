@@ -4,7 +4,7 @@ using Serilog.Events;
 using Serilog;
 using TTechEcommerceApi.Extensions;
 using TTechEcommerceApi.Filters.ActionFilters;
-using TTechEcommerceApi.Helper;
+using TTechEcommerceApi.Authentication;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.Middlewares;
 using TTechEcommerceApi.Repository;

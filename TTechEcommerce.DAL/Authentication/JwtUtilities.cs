@@ -7,7 +7,7 @@ using System.Text;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.Shared.Enum;
 
-namespace TTechEcommerceApi.Helper
+namespace TTechEcommerceApi.Authentication
 {
 
     public class JwtUtilities : IJwtUtilities
