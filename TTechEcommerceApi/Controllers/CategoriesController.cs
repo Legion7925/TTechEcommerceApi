@@ -22,7 +22,7 @@ namespace TTechEcommerceApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Category>))]
-        public IActionResult GetAll()
+        public IActionResult GetCategories()
         {
             return Ok(categoryService.GetAll());
         }

@@ -39,7 +39,7 @@ namespace TTechEcommerceApi.Controllers
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponseModel))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateResponseModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequestModel model)
         {
