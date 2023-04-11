@@ -21,9 +21,9 @@ namespace TTechEcommerceApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Order>))]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] QueryParametersModel queryParameters)
         {
-            return Ok(orderService.GetOrders());
+            return Ok(orderService.GetOrders(queryParameters));
         }
 
         [HttpPost]

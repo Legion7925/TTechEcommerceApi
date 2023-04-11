@@ -1,4 +1,5 @@
 ﻿using EcommerceApi.Entities;
+using TTechEcommerceApi.Model;
 
 namespace TTechEcommerceApi.Interface
 {

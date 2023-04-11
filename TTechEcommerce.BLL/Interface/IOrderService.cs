@@ -8,7 +8,7 @@ namespace TTechEcommerceApi.Interface
         Task<Order?> AddOrder(Order order);
         Task<bool> DeleteOrder(int orderId);
         Task<Order?> GetOrderById(int orderId);
-        IEnumerable<Order> GetOrders();
+        IEnumerable<Order> GetOrders(QueryParametersModel queryParameters);
         Task<Order?> UpdateOrder(OrderUpdateModel order, int orderId);
     }
 

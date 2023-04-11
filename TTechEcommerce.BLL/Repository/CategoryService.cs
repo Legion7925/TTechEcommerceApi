@@ -1,6 +1,7 @@
 ﻿using EcommerceApi.Entities;
 using Microsoft.EntityFrameworkCore;
 using TTechEcommerceApi.Interface;
+using TTechEcommerceApi.Model;
 
 namespace TTechEcommerceApi.Repository
 {
@@ -15,7 +16,6 @@ namespace TTechEcommerceApi.Repository
 
         public IEnumerable<Category> GetAll()
         {
-            //todo change the return type to action result
             return context.Categories.AsNoTracking();
         }
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TTechEcommerceApi.Filters.ActionFilters;
 using TTechEcommerceApi.Interface;
+using TTechEcommerceApi.Model;
 
 namespace TTechEcommerceApi.Controllers
 {
@@ -24,7 +25,8 @@ namespace TTechEcommerceApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Category>))]
         public IActionResult GetCategories()
         {
-            return Ok(categoryService.GetAll());
+            var test = categoryService.GetAll();
+            return Ok(test);
         }
 
         [HttpPost]

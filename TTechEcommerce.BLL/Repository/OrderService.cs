@@ -17,9 +17,9 @@ namespace TTechEcommerceApi.Repository
             this.mapper = mapper;
         }
 
-        public IEnumerable<Order> GetOrders()
+        public IEnumerable<Order> GetOrders(QueryParametersModel queryParameters)
         {
-            return context.Orders.AsNoTracking();
+            return context.Orders.AsNoTracking().Skip((queryParameters.Page - 1) * queryParameters.Size).Take(queryParameters.Size).ToArray();
         }
 
         public async Task<Order?> GetOrderById(int orderId)
