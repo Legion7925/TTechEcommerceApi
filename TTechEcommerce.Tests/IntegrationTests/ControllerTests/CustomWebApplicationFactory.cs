@@ -8,9 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TTechEcommerceApi.Filters.ActionFilters;
 using TTechEcommerceApi.Interface;
 
-namespace TTechEcommerce.Tests.ControllerTests
+namespace TTechEcommerce.Tests.IntegrationTests.ControllerTests
 {
     public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {

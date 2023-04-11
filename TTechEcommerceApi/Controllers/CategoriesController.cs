@@ -29,7 +29,7 @@ namespace TTechEcommerceApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Category))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] 
         public async Task<IActionResult> Add([FromBody] Category category)
         {
             var submittedCategory = await categoryService.AddCategory(category);
@@ -44,7 +44,7 @@ namespace TTechEcommerceApi.Controllers
         public async Task<IActionResult> Update([FromRoute] int categoryId, [FromBody] Category category)
         {
             await categoryService.UpdateCategory(categoryId, category);
-            return RedirectToAction(nameof(GetById), new { categoryId = categoryId });
+            return Ok();
         }
 
         [HttpGet]
