@@ -26,12 +26,17 @@ namespace TTechEcommerceApi.Repository
         {
             var key = "UserList";
 
-             return memoryCache.GetOrCreate(key, entry =>
-             {
-                 entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-                 entry.SetSlidingExpiration(TimeSpan.FromMinutes(1));
-                 return decorated.GetAllUsers();
-             });
+            //if user list is not cached before it will cache the user
+            //list and gets the list from database if it's cached and 
+            //the expiration time is not over it will return the user
+            //from memoery
+            var cachedUserList = memoryCache.GetOrCreate(key, entry =>
+            {
+                entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
+                entry.SetSlidingExpiration(TimeSpan.FromMinutes(1));
+                return decorated.GetAllUsers();
+            });
+            return cachedUserList ?? new List<UserResponseModel>();
         }
 
         public Task<UserResponseModel> Register(UserRequestModel model)

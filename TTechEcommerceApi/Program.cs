@@ -36,6 +36,7 @@ public class Program
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IJwtUtilities, JwtUtilities>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<IUserService, CachedUserService>();
             builder.Services.AddScoped<ValidateCategoryExists>();

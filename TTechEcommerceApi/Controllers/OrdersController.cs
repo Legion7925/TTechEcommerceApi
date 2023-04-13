@@ -32,13 +32,13 @@ namespace TTechEcommerceApi.Controllers
         public async Task<IActionResult> Add([FromBody] Order order)
         {
             var submittedOrder = await orderService.AddOrder(order);
-            return Created("TODO", submittedOrder);
+            return CreatedAtAction(nameof(GetById) , new { orderId  = submittedOrder.Id} , submittedOrder);
         }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Route("{categoryId}")]
+        [Route("{orderId}")]
         public async Task<IActionResult> Update([FromRoute] int orderId, [FromBody] OrderUpdateModel order)
         {
             var result = await orderService.UpdateOrder(order, orderId);

@@ -27,26 +27,20 @@ namespace TTechEcommerceApi.Repository
             return await context.Orders.FirstOrDefaultAsync(i => i.Id == orderId);
         }
 
-        public async Task<Order?> AddOrder(Order order)
+        public async Task<Order> AddOrder(Order order)
         {
             context.Orders.Add(order);
             await context.SaveChangesAsync();
             return order;
         }
 
-        public async Task<Order?> UpdateOrder(OrderUpdateModel order, int orderId)
+        public async Task<Order> UpdateOrder(OrderUpdateModel order, int orderId)
         {
             var findOrder = await GetOrderById(orderId);
-            if (findOrder != null)
-            {
-                mapper.Map(order, findOrder);
-                await context.SaveChangesAsync();
-                return findOrder;
-            }
-            else
-            {
-                return null;
-            }
+            mapper.Map(order, findOrder);
+            await context.SaveChangesAsync();
+            return findOrder!;
+
         }
 
         public async Task<bool> DeleteOrder(int orderId)

@@ -46,7 +46,7 @@ namespace TTechEcommerceApi.Controllers
         public async Task<IActionResult> Update([FromRoute] int productId, [FromBody] Product product)
         {
             await productService.UpdateProduct(productId, product);
-            return RedirectToAction(nameof(GetById), new { productId = productId });
+            return Ok();
         }
 
         [HttpGet]

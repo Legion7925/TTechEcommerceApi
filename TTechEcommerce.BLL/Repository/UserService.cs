@@ -21,13 +21,21 @@ namespace TTechEcommerceApi.Repository
             this.mapper = mapper;
             this.jwtUtilities = jwtUtilities;
         }
-
+        /// <summary>
+        /// gets the userlist from database
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<UserResponseModel> GetAllUsers()
         {
             var users = context.Users.AsNoTracking();
             return mapper.Map<IEnumerable<UserResponseModel>>(users);
         }
-
+        /// <summary>
+        /// get one user with id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="TTechException"></exception>
         private async Task<User> GetUserById(int userId)
         {
             var user = await context.Users.FirstOrDefaultAsync(i => i.Id == userId);
@@ -35,7 +43,12 @@ namespace TTechEcommerceApi.Repository
                 throw new TTechException("User Not Found!");
             return user;
         }
-
+        /// <summary>
+        /// Create a user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="TTechException"></exception>
         public async Task<UserResponseModel> Register(UserRequestModel model)
         {
             var usernameExits = context.Users.Any(i => i.Username == model.Username);
@@ -66,7 +79,12 @@ namespace TTechEcommerceApi.Repository
 
             return mapper.Map<UserResponseModel>(user);
         }
-
+        /// <summary>
+        /// login the user 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="TTechException"></exception>
         public async Task<AuthenticateResponseModel> Authenticate(AuthenticateRequestModel model)
         {
             var findUser = await context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
@@ -81,7 +99,13 @@ namespace TTechEcommerceApi.Repository
 
             return response;
         }
-
+        /// <summary>
+        /// updates the users information
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="TTechException"></exception>
         public async Task<UserResponseModel> Update(UserRequestModel model, int userId)
         {
             var user = await GetUserById(userId);
@@ -100,7 +124,11 @@ namespace TTechEcommerceApi.Repository
             await context.SaveChangesAsync();
             return mapper.Map<UserResponseModel>(model);
         }
-
+        /// <summary>
+        /// delete one user based on user id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task Delete(int userId)
         {
             var user = await GetUserById(userId);
