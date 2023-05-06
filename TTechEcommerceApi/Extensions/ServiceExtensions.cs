@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using EcommerceApi.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -91,6 +93,15 @@ namespace TTechEcommerceApi.Extensions
                .ReadFrom.Configuration(context.Configuration)
                .ReadFrom.Services(services)
                .Enrich.FromLogContext());
+        }
+
+        public static async Task MigrateDatabaseIfDoesntExist(this WebApplication builder)
+        {
+            using (var scope = builder.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<EcommerceContext>();
+                await db.Database.MigrateAsync();
+            }
         }
 
     }

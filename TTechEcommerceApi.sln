@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTechEcommerce.BLL", "TTech
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTechEcommerce.DAL", "TTechEcommerce.DAL\TTechEcommerce.DAL.csproj", "{4D6DDEF7-DC40-45DB-938A-FE833167FCFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTechEcommerce.Tests", "TTechEcommerce.Tests\TTechEcommerce.Tests.csproj", "{A5814E55-5FD5-455F-BFBD-F9C85C61B5B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TTechEcommerce.Tests", "TTechEcommerce.Tests\TTechEcommerce.Tests.csproj", "{A5814E55-5FD5-455F-BFBD-F9C85C61B5B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{B53D9E36-268F-4E0C-9CE6-2FC43110D21A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC0324CE-6A25-47AA-ABB0-2022B275DA3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +40,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D34AA7CD-8BCB-414C-9344-95C5AF717CC9} = {B53D9E36-268F-4E0C-9CE6-2FC43110D21A}
+		{F576C2E8-06F7-4D2D-93E8-A58A5DB72D5D} = {B53D9E36-268F-4E0C-9CE6-2FC43110D21A}
+		{4D6DDEF7-DC40-45DB-938A-FE833167FCFB} = {B53D9E36-268F-4E0C-9CE6-2FC43110D21A}
+		{A5814E55-5FD5-455F-BFBD-F9C85C61B5B2} = {EC0324CE-6A25-47AA-ABB0-2022B275DA3F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BAA7001B-152C-4449-8CC0-794A4545AFB5}

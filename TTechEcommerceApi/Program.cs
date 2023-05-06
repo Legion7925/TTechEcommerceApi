@@ -11,7 +11,7 @@ using TTechEcommerceApi.Repository;
 
 public class Program
 {
-    private static int Main(string[] args)
+    private static async Task<int> Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -51,6 +51,8 @@ public class Program
 
 
             var app = builder.Build();
+
+            await app.MigrateDatabaseIfDoesntExist();
 
             app.UseSerilogRequestLogging(configure =>
             {
