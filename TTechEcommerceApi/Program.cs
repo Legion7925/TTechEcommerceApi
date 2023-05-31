@@ -24,7 +24,6 @@ public class Program
             Log.Information("starting the web host");
 
             var builder = WebApplication.CreateBuilder(args);
-
             builder.ConfigureSerilog();
 
             // Add services to the container.
@@ -63,8 +62,8 @@ public class Program
             if (app.Environment.IsDevelopment())
             {
             }
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 

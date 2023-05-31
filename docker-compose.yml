@@ -2,9 +2,7 @@ version: "3.8"
 
 services:
   api:
-    build:
-        context: .
-        dockerfile: Dockerfile
+    build: ./TTechEcommerceApi
     ports:
         - 5000:80
     depends_on:
@@ -18,4 +16,4 @@ services:
     environment:
         SA_PASSWORD: "123qwe!@#"
         ACCEPT_EULA: "Y"
-  
+        ASPNETCORE_URLS: http://+:5000
