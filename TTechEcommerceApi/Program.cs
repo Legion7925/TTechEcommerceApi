@@ -8,6 +8,9 @@ using TTechEcommerceApi.Authentication;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.Middlewares;
 using TTechEcommerceApi.Repository;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
+using System.Net.Mime;
 
 public class Program
 {
@@ -31,6 +34,7 @@ public class Program
             builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
             builder.ConfigureAuthentication();
+            builder.Services.AddHealthChecks();
 
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductService, ProductService>();
@@ -64,6 +68,25 @@ public class Program
             }
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            app.UseHealthChecks("/healthcheck", new HealthCheckOptions
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    var result = JsonConvert.SerializeObject(new
+                    {
+                        status = report.Status.ToString(),
+                        checks = report.Entries.Select(c => new
+                        {
+                            check = c.Key,
+                            result = c.Value.Status.ToString()
+                        }),
+                    });
+
+                    context.Response.ContentType = MediaTypeNames.Application.Json;
+                    await context.Response.WriteAsync(result);
+                }
+            });
 
             app.UseHttpsRedirection();
 

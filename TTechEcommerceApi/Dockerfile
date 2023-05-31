@@ -20,8 +20,9 @@ RUN dotnet publish "TTechEcommerceApi.csproj" -c Release -o /app/publish /p:UseA
 
 FROM base AS final
 WORKDIR /app
-#RUN apk update && apk add --no-cache icu-libs
+
 ENV ASPNETCORE_URLS=http://localhost:5000
 ENV ASPNETCORE_URLS=https://localhost:5001
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TTechEcommerceApi.dll"]
