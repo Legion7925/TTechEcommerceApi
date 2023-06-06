@@ -4,16 +4,20 @@ services:
   api:
     build: ./TTechEcommerceApi
     ports:
-        - 5000:80
+        - 3000:80
     depends_on:
         - db
 
   db:
-    image: "mcr.microsoft.com/mssql/server:latest"
+    image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
         - 1433:1433
+    volumes:
+        - sqlserver_data:/var/opt/mssql
     
     environment:
         SA_PASSWORD: "123qwe!@#"
         ACCEPT_EULA: "Y"
         ASPNETCORE_URLS: http://+:5000
+volumes:
+  sqlserver_data:
