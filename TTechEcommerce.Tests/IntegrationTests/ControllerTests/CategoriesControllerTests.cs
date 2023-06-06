@@ -8,7 +8,6 @@ using EcommerceApi.Entities;
 using TTechEcommerceApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
-using System;
 
 namespace TTechEcommerce.Tests.IntegrationTests.ControllerTests;
 
@@ -16,16 +15,16 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
 {
     private readonly CustomWebApplicationFactory<Program, EcommerceContext> _factory;
     private readonly HttpClient _client;
-    private string _token = string.Empty;
 
     public CategoriesControllerTests(CustomWebApplicationFactory<Program, EcommerceContext> factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();
-        
-        Authorize().Wait();
-    }
 
+        //mock authentication
+        var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("Test:test"));
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
+    }
 
     [Fact]
     public async Task GetCategories_WhenCalled_ReturnsAllCategories()
@@ -38,7 +37,7 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
 
         _factory.MockCategoryService.Setup(c => c.GetAll()).Returns(mockCategories);
 
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
         var response = await _client.GetAsync("/api/Categories");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -72,12 +71,10 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
 
         _factory.MockCategoryService.Setup(c => c.GetCategoryById(2)).Returns(Task.FromResult(searchCategory)!);
 
-        var controller = new CategoriesController(_factory.MockCategoryService.Object);
+        var response = await _client.GetAsync($"/api/Categories/{2}");
+        var result = JsonConvert.DeserializeObject<Category>(await response.Content.ReadAsStringAsync());   
 
-        var result = await controller.GetById(2);
-        var okObjectResult = Assert.IsType<OkObjectResult>(result);
-        //Assert.Equal(searchCategory, okObjectResult.Value);
-        searchCategory.Should().Be(okObjectResult.Value);
+        result.Should().BeOfType<Category>().Which.Name.Should().Be("A");
     }
 
     [Fact]
@@ -89,8 +86,6 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
             .Returns(Task.FromResult(newCategory))
             .Verifiable();
 
-
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
         var response = await _client.PostAsJsonAsync("/api/Categories", newCategory);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -126,31 +121,15 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
         _factory.MockCategoryService
             .Setup(c => c.DeleteCategory(It.Is<int>(i => i == 1))).Verifiable();
 
+        //we use controller here because it has a custom action filter
+        //and according to microsoft docs we have to test the custom filter
+        //seperate from the controller so we don't have a choice but to use the 
+        //controller action in isolation
         var controller = new CategoriesController(_factory.MockCategoryService.Object);
 
         var result = await controller.Delete(1);
         Assert.IsType<NoContentResult>(result);
 
         _factory.MockCategoryService.VerifyAll();
-    }
-
-    private async Task Authorize()
-    {
-        if (!string.IsNullOrEmpty(_token))
-            return;
-
-        await _client.PostAsJsonAsync("/api/Users/Register", new UserRequestModel
-        {
-            Username = "root",
-            Password = "root",
-            ConfirmPassword = "root",
-            NameFamily = "root",
-            Email = "root@testmail.com"
-        });
-
-        var response = await _client.PostAsJsonAsync("/api/Users/Login", new AuthenticateRequestModel { Username = "root", Password = "root" });
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var data = JsonConvert.DeserializeObject<AuthenticateResponseModel>(await response.Content.ReadAsStringAsync());
-        _token = data!.JwtToken!;
     }
 }

@@ -1,5 +1,7 @@
-﻿using EcommerceApi.Entities;
+﻿using Bazinga.AspNetCore.Authentication.Basic;
+using EcommerceApi.Entities;
 using FluentAssertions.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -14,7 +16,7 @@ using TTechEcommerceApi.Interface;
 
 namespace TTechEcommerce.Tests.IntegrationTests.ControllerTests
 {
-    public class CustomWebApplicationFactory<TProgram,TDbContext> : WebApplicationFactory<TProgram> , IAsyncLifetime    
+    public class CustomWebApplicationFactory<TProgram, TDbContext> : WebApplicationFactory<TProgram>, IAsyncLifetime
         where TProgram : class where TDbContext : DbContext
     {
         private readonly MsSqlContainer _container;
@@ -40,6 +42,16 @@ namespace TTechEcommerce.Tests.IntegrationTests.ControllerTests
                 services.RemoveDbContext<TDbContext>();
                 services.AddDbContext<TDbContext>(options => options.UseSqlServer(_container.GetConnectionString()));
                 //services.EnsureDbCreated<TDbContext>();
+
+                //mock authentication and authorization policy with bazinga basic authentication library
+                services.AddAuthentication()
+                 .AddBasicAuthentication(credentials =>Task.FromResult(credentials.username == "Test" && credentials.password == "test"));
+                services.AddAuthorization(config =>
+                {
+                    config.DefaultPolicy = new AuthorizationPolicyBuilder(config.DefaultPolicy)
+                                                .AddAuthenticationSchemes(BasicAuthenticationDefaults.AuthenticationScheme)
+                                                .Build();
+                });
                 services.AddSingleton(MockCategoryService.Object);
             });
         }
