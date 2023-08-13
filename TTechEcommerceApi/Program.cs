@@ -27,11 +27,16 @@ try
     var builder = WebApplication.CreateBuilder(args);
     builder.ConfigureSerilog();
     // Add services to the container.
-    builder.Services.AddDbContext<EcommerceContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DockerConnectionString"]));
+    builder.Services.AddDbContext<EcommerceContext>(options => options.UseNpgsql(builder.Configuration["ConnectionStrings:PostgresConnectionString"]));
     builder.Services.AddAutoMapper(typeof(Program));
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
     builder.ConfigureAuthentication();
     builder.Services.AddHealthChecks();
+    builder.Services.AddStackExchangeRedisCache(redisOptions =>
+    {
+        string connection = "Redis";
+        redisOptions.Configuration = builder.Configuration.GetConnectionString(connection);
+    });
 
     builder.Services.AddScoped<ICategoryService, CategoryService>();
     builder.Services.AddScoped<IProductService, ProductService>();

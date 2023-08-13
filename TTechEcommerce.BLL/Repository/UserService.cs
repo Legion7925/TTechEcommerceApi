@@ -15,7 +15,7 @@ namespace TTechEcommerceApi.Repository
         private readonly IMapper mapper;
         private readonly IJwtUtilities jwtUtilities;
 
-        public UserService(EcommerceContext context, IMapper mapper , IJwtUtilities jwtUtilities)
+        public UserService(EcommerceContext context, IMapper mapper, IJwtUtilities jwtUtilities)
         {
             this.context = context;
             this.mapper = mapper;
@@ -25,10 +25,11 @@ namespace TTechEcommerceApi.Repository
         /// gets the userlist from database
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<UserResponseModel> GetAllUsers()
+        public Task<IEnumerable<UserResponseModel>> GetAllUsers()
         {
             var users = context.Users.AsNoTracking();
-            return mapper.Map<IEnumerable<UserResponseModel>>(users);
+            var response = mapper.Map<IEnumerable<UserResponseModel>>(users);
+            return Task.FromResult(response);
         }
         /// <summary>
         /// get one user with id
@@ -67,7 +68,7 @@ namespace TTechEcommerceApi.Repository
             var isFirstUser = context.Users.Any();
 
             user.Role = isFirstUser ? Role.User : Role.Admin;
-            user.Created = DateTime.Now;
+            user.Created = DateTime.UtcNow;
 
             //hashing password 
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);

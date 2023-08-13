@@ -22,9 +22,9 @@ namespace TTechEcommerceApi.Controllers
         [Authorize(Roles = "Admin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<UserResponseModel>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserResponseModel>>> GetAll()
         {
-            return Ok(userService.GetAllUsers());
+            return Ok(await userService.GetAllUsers());
         }
 
         [HttpPost("Register")]

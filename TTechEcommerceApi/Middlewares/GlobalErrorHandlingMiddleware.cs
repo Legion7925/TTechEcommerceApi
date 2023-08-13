@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Serilog;
 using System.Net;
 using TTechEcommerceApi.Helper;
 using TTechEcommerceApi.Shared.Model;
@@ -8,10 +9,12 @@ namespace TTechEcommerceApi.Middlewares
     public class GlobalErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<GlobalErrorHandlingMiddleware> _logger;
 
-        public GlobalErrorHandlingMiddleware(RequestDelegate next)
+        public GlobalErrorHandlingMiddleware(RequestDelegate next, ILogger<GlobalErrorHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -42,7 +45,7 @@ namespace TTechEcommerceApi.Middlewares
             });
         }
 
-        private async Task HandleUnhandledExceptionAsync(HttpContext context , Exception ex)
+        private async Task HandleUnhandledExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -52,9 +55,6 @@ namespace TTechEcommerceApi.Middlewares
                 Message = "Something went wrong please contact our support",
                 StatusCode = (int)HttpStatusCode.InternalServerError,
             });
-
-            //todo log the exception error in serilog
-
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using System.Text;
+using System.Text.Json;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.Model;
 
@@ -7,12 +11,12 @@ namespace TTechEcommerceApi.Repository
     public class CachedUserService : IUserService
     {
         private readonly UserService decorated;
-        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache _distributedCache;
 
-        public CachedUserService(UserService decorated, IMemoryCache memoryCache)
+        public CachedUserService(UserService decorated, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             this.decorated = decorated;
-            this.memoryCache = memoryCache;
+            _distributedCache = distributedCache;
         }
 
         public Task<AuthenticateResponseModel> Authenticate(AuthenticateRequestModel model)
@@ -22,21 +26,31 @@ namespace TTechEcommerceApi.Repository
 
         public Task Delete(int userId) => decorated.Delete(userId);
 
-        public IEnumerable<UserResponseModel> GetAllUsers()
+        public async Task<IEnumerable<UserResponseModel>> GetAllUsers()
         {
-            var key = "UserList";
+            var key = "users";
 
-            //if user list is not cached before it will cache the user
-            //list and gets the list from database if it's cached and 
-            //the expiration time is not over it will return the user
-            //from memoery
-            var cachedUserList = memoryCache.GetOrCreate(key, entry =>
+            byte[]? cachedUserData = await _distributedCache.GetAsync(key);
+
+
+            IEnumerable<UserResponseModel>? users;
+            if (cachedUserData is null)
             {
-                entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
-                entry.SetSlidingExpiration(TimeSpan.FromMinutes(1));
-                return decorated.GetAllUsers();
-            });
-            return cachedUserList ?? new List<UserResponseModel>();
+                users = decorated.GetAllUsers().GetAwaiter().GetResult();
+
+                if (!users.Any())
+                {
+                    return users;
+                }
+                var cachedDataString = JsonConvert.SerializeObject(users);
+                await _distributedCache.SetAsync(key, Encoding.UTF8.GetBytes(cachedDataString));
+
+                return users;
+            }
+
+            users = JsonConvert.DeserializeObject<IEnumerable<UserResponseModel>>(Encoding.UTF8.GetString(cachedUserData));
+
+            return users ?? new List<UserResponseModel>();
         }
 
         public Task<UserResponseModel> Register(UserRequestModel model)

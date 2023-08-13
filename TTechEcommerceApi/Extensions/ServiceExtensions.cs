@@ -1,10 +1,12 @@
 ﻿using EcommerceApi.Entities;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Reflection;
 using System.Text;
 using TTechEcommerceApi.Authentication;
 using TTechEcommerceApi.Helper;
@@ -93,6 +95,11 @@ namespace TTechEcommerceApi.Extensions
                .ReadFrom.Configuration(context.Configuration)
                .ReadFrom.Services(services)
                .Enrich.FromLogContext());
+        }
+
+        public static void ConfigureFluentValidation(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddFluentValidationAutoValidation();
         }
 
         public static async Task MigrateDatabaseIfDoesntExist(this WebApplication builder)

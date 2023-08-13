@@ -13,6 +13,8 @@ namespace TTechEcommerceApi.MapperConfiguration
             CreateMap<User, UserResponseModel>();
 
             CreateMap<User, AuthenticateResponseModel>();
+
+            //CreateMap<IQueryable<User>, IEnumerable<UserResponseModel>>();
         }
     }
 }
