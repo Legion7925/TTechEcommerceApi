@@ -111,5 +111,10 @@ namespace TTechEcommerceApi.Extensions
             }
         }
 
+        public static void AddElasticSearch(this IServiceCollection builder , IConfiguration configuration)
+        {
+
+        }
+
     }
 }
