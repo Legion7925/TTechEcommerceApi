@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Nest;
 using Serilog;
-using System.Reflection;
 using System.Text;
 using TTechEcommerceApi.Authentication;
-using TTechEcommerceApi.Helper;
 
 namespace TTechEcommerceApi.Extensions
 {
@@ -111,10 +110,40 @@ namespace TTechEcommerceApi.Extensions
             }
         }
 
-        public static void AddElasticSearch(this IServiceCollection builder , IConfiguration configuration)
+        public static void AddElasticSearch(this IServiceCollection services, IConfiguration configuration)
         {
+            var url = configuration["ElasticSettings:BaseUrl"] ?? string.Empty;
+            var defaultIndex = configuration["ElasticSettings:DefaultIndex"] ?? string.Empty;
 
+            //this is a poor implementation only for test purpose
+            var settings = new ConnectionSettings(new Uri(url))
+                .DefaultIndex(defaultIndex)
+                .CertificateFingerprint(configuration["ElasticSettings:Certificate"])
+                .BasicAuthentication(configuration["ElasticSettings:Username"], configuration["ElasticSettings:Password"]);
+
+            AddDefaultMappings(settings);
+
+            var client = new ElasticClient(settings);
+
+            services.AddSingleton<IElasticClient>(client);
+
+            CreateIndex(client, defaultIndex);
         }
 
+        private static void CreateIndex(ElasticClient client, string indexName)
+        {
+            var createIndexResponse = client.Indices.Create(indexName,
+                index => index.Map<Product>(x => x.AutoMap())
+            );
+        }
+
+        private static void AddDefaultMappings(ConnectionSettings settings)
+        {
+            settings
+                .DefaultMappingFor<Product>(m => m
+                    .Ignore(p => p.Price)
+                    .Ignore(p => p.ImagePath)
+                );
+        }
     }
 }

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Text;
-using System.Text.Json;
 using TTechEcommerceApi.Interface;
 using TTechEcommerceApi.Model;
 

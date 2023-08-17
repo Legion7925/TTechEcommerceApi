@@ -11,8 +11,8 @@ using TTechEcommerceApi.Repository;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using System.Net.Mime;
-
-
+using TTechEcommerce.BLL.Interface;
+using TTechEcommerce.BLL.ElasticSearchRepository;
 
 Log.Logger = new LoggerConfiguration()
 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -27,7 +27,7 @@ try
     var builder = WebApplication.CreateBuilder(args);
     builder.ConfigureSerilog();
     // Add services to the container.
-    builder.Services.AddDbContext<EcommerceContext>(options => options.UseNpgsql(builder.Configuration["ConnectionStrings:PostgresConnectionString"]));
+    builder.Services.AddDbContext<EcommerceContext>(options => options.UseNpgsql(builder.Configuration["ConnectionStrings:LocalPostgresConnectionString"]));
     builder.Services.AddAutoMapper(typeof(Program));
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
     builder.ConfigureAuthentication();
@@ -40,6 +40,7 @@ try
 
     builder.Services.AddScoped<ICategoryService, CategoryService>();
     builder.Services.AddScoped<IProductService, ProductService>();
+    builder.Services.AddScoped<IElasticService<Product>, ProductElasticSearchRepository>();
     builder.Services.AddScoped<IJwtUtilities, JwtUtilities>();
     builder.Services.AddScoped<IOrderService, OrderService>();
     builder.Services.AddScoped<UserService>();
@@ -53,6 +54,7 @@ try
     builder.Services.ConfigureVersionedApiExplorer();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.ConfigureSwaggerUIForAuthorizationWithToken();
+    builder.Services.AddElasticSearch(builder.Configuration);
 
     var app = builder.Build();
 
