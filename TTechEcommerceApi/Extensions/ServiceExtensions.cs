@@ -115,7 +115,6 @@ namespace TTechEcommerceApi.Extensions
             var url = configuration["ElasticSettings:BaseUrl"] ?? string.Empty;
             var defaultIndex = configuration["ElasticSettings:DefaultIndex"] ?? string.Empty;
 
-            //this is a poor implementation only for test purpose
             var settings = new ConnectionSettings(new Uri(url))
                 .DefaultIndex(defaultIndex)
                 .CertificateFingerprint(configuration["ElasticSettings:Certificate"])
